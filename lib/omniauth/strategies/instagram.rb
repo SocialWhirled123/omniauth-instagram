@@ -28,6 +28,10 @@ module OmniAuth
         }
       end
 
+      def callback_url
+        options[:redirect_url] || super
+      end
+
       def raw_info
         @data ||= access_token.params["user"]
         unless @data
