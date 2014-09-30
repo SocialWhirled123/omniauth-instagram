@@ -12,6 +12,7 @@ module OmniAuth
       def request_phase
         options[:scope] ||= 'basic'
         options[:response_type] ||= 'code'
+        options[:origin] = request.params["origin"]
         super
       end
 
@@ -28,6 +29,10 @@ module OmniAuth
         }
       end
 
+      extra do
+        raw_info
+      end
+
       def callback_url
         options[:redirect_url] || super
       end
@@ -39,6 +44,7 @@ module OmniAuth
           access_token.options[:param_name] = "access_token"
           @data ||= access_token.get('/v1/users/self').parsed['data'] || {}
         end
+        @data[:origin] = options[:origin]
         @data
       end
     end
